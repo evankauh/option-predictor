@@ -15,24 +15,29 @@ Key Features:
 
 ## **Project Structure**
 
-option-predictor/ ├── data/
-│ ├── raw/ # Raw market data 
-│ ├── processed/ # Cleaned and processed data 
-├── models/ # Saved trained machine learning models 
-├── notebooks/ # Jupyter notebooks for exploration and prototyping 
-├── src/
-│ ├── data_processing.py # Data collection and preprocessing 
-│ ├── model.py # Model training and evaluation 
-│ ├── predict.py # Live prediction 
-│ ├── backtesting.py # Backtesting the strategy on historical data 
-├── tests/ # Unit tests for the project 
-├── config/
-│ └── settings.yaml # Project configuration and parameters 
-├── README.md # Project documentation 
-├── requirements.txt # Python dependencies 
-└── run.py # Main script to run the project
+Data
+- raw: Raw market data
+- processed: cleaned and processed data
 
+Models (saved trained machine learning models)
 
+Notebooks (Jupyter notebooks for explanation and prototyping)
+
+src
+- `data_processing.py`: Data collection and preprocessing
+- `model.py`: Model training and evaluation
+- `backtesting.py`: Backtesting the strategy on historical data
+- `predict.py`: Live prediction
+
+Tests (unit tests)
+- CI/CD testing to be added
+
+Config
+- `settings.yml`: project configutation and parameters
+
+`requirements.txt`: Python dependencies
+
+`run.py`: Main script to run the project
 
 ---
 
