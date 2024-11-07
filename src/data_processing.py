@@ -7,7 +7,6 @@ def load_data(filename):
 def clean_data(data):
     """Clean and preprocess raw data."""
     data.dropna(inplace=True)
-    data = data[data["volume"] > 0]  # Filter out rows with no trading volume
     return data
 
 def transform_features(data):

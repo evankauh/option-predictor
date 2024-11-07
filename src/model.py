@@ -1,56 +1,34 @@
 import numpy as np
+import yaml
 
-def objective_function(contract, weights):
-    """Objective function combining premium and risk.
-    
-    Args:
-        contract (dict): Contract details with 'premium', 'delta', 'vega'.
-        weights (tuple): Weights (alpha, beta, gamma) for premium, delta, and vega.
-        
-    Returns:
-        float: Score representing the desirability of the contract.
-    """
+# Load config
+with open("config/config.yaml", "r") as file:
+    config = yaml.safe_load(file)
+
+def objective_function(contract, weights, max_risk, risk_free_rate):
+    """Objective function combining premium and risk with penalties."""
     premium, delta, vega = contract["premium"], contract["delta"], contract["vega"]
     alpha, beta, gamma = weights
-    return alpha * premium - beta * abs(delta) - gamma * abs(vega)
+    sharpe_penalty = 0
+    if vega > max_risk["vega"] or delta > max_risk["delta"]:
+        sharpe_penalty = (premium - risk_free_rate) / np.std([delta, vega])
+    return alpha * premium - beta * abs(delta) - gamma * abs(vega) - sharpe_penalty
 
-def gradient_descent(contracts, weights, learning_rate=0.01, iterations=100):
-    """Optimize contracts using gradient descent to find the best option contracts.
-
-    Args:
-        contracts (list): List of contract dictionaries with 'premium', 'delta', and 'vega' values.
-        weights (tuple): Weights for objective function (alpha, beta, gamma).
-        learning_rate (float): Step size for gradient updates.
-        iterations (int): Number of iterations for the gradient descent loop.
-
-    Returns:
-        dict: Optimal contract with highest objective score.
-    """
-    # Initialize the best contract and score
+def gradient_descent(contracts, weights, max_risk, risk_free_rate, learning_rate=0.01, iterations=100):
+    """Optimize contracts using gradient descent."""
     best_contract = contracts[0]
-    best_score = objective_function(best_contract, weights)
-    
+    best_score = objective_function(best_contract, weights, max_risk, risk_free_rate)
     for _ in range(iterations):
         for contract in contracts:
-            # Calculate the current score
-            current_score = objective_function(contract, weights)
-            
-            # Compute gradients (using finite difference for simplicity)
+            current_score = objective_function(contract, weights, max_risk, risk_free_rate)
             grad_premium = weights[0]
             grad_delta = -weights[1] * np.sign(contract["delta"])
             grad_vega = -weights[2] * np.sign(contract["vega"])
-            
-            # Adjust the contract parameters
             contract["premium"] += learning_rate * grad_premium
             contract["delta"] += learning_rate * grad_delta
             contract["vega"] += learning_rate * grad_vega
-            
-            # Evaluate new score
-            new_score = objective_function(contract, weights)
-            
-            # Update the best contract if the new score is higher
+            new_score = objective_function(contract, weights, max_risk, risk_free_rate)
             if new_score > best_score:
                 best_score = new_score
                 best_contract = contract.copy()
-    
     return best_contract
