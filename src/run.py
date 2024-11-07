@@ -8,6 +8,7 @@ import backtesting
 def main():
     # Step 1: Fetch and clean data
     data = data_fetch.fetch_market_data("AAPL")
+    print("Fetched market data:", data)
     clean_data = data_processing.clean_data(data)
     
     # Step 2: Feature engineering
