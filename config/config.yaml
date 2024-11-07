@@ -1,0 +1,13 @@
+api_key: "92PCKBRPZHN9K25D"
+data_source: "Alpha Vantage"
+stock_symbol: "AAPL"
+interval: "1min"
+strategy: "covered_call"
+weights:
+  alpha: 1.0
+  beta: 0.5
+  gamma: 0.3
+max_risk:
+  delta: 0.35
+  vega: 0.2
+risk_free_rate: 0.01
