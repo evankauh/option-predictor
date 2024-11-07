@@ -1,0 +1,5 @@
+api_key: "92PCKBRPZHN9K25D"
+data_source: "Alpha Vantage"
+stock_symbol: "AAPL"
+interval: "1min"
+strategy: "covered_call"
